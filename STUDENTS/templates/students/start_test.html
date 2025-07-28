@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Testni Boshlash{% endblock %}
+
+{% block content %}
+<h2>{{ test.title }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 20px;">
+        <strong>{{ question.text }}</strong><br>
+
+        {% for option in options %}
+            <label>
+                <input type="radio" name="option" value="{{ option.id }}" required>
+                {{ option.text }}
+            </label><br>
+        {% endfor %}
+    </div>
+
+    <button type="submit">Keyingi savol</button>
+</form>
+{% endblock %}

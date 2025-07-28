@@ -1,0 +1,19 @@
+<!-- templates/students/enter_test_code.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Testga kirish</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="code">Test kodi:</label>
+      <input type="text" name="code" id="code" class="form-control" required>
+    </div>
+    {% if error %}
+      <div class="alert alert-danger mt-3">{{ error }}</div>
+    {% endif %}
+    <button type="submit" class="btn btn-primary mt-3">Boshlash</button>
+  </form>
+</div>
+{% endblock %}

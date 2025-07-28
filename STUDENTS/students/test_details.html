@@ -1,0 +1,24 @@
+<!-- templates/students/test_details.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h3>Batafsil natijalar</h3>
+  {% for result in results %}
+    <div class="card my-3 p-3 {% if result.is_correct %}border-success{% else %}border-danger{% endif %}">
+      <h5>{{ forloop.counter }}. {{ result.question.text }}</h5>
+      <p>
+        Sizning javobingiz: 
+        <span class="{% if result.is_correct %}text-success{% else %}text-danger{% endif %}">
+          {{ result.selected_option.text }}
+        </span>
+        {% if not result.is_correct %}
+          <br>
+          To‘g‘ri javob: <strong class="text-success">{{ result.correct_option.text }}</strong>
+        {% endif %}
+      </p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

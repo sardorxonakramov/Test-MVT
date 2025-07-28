@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Natija{% endblock %}
+
+{% block content %}
+<h2>Test natijasi: {{ test.title }}</h2>
+<p><strong>Ball:</strong> {{ student_test.score }}</p>
+<p><strong>To‘g‘ri javoblar soni:</strong> {{ correct_count }}</p>
+<p><strong>Jami savollar:</strong> {{ total_questions }}</p>
+
+<hr>
+
+{% for answer in answers %}
+    <div style="margin-bottom: 15px;">
+        <p><strong>{{ forloop.counter }}. {{ answer.question.text }}</strong></p>
+        <p>Siz tanlagan javob: {{ answer.selected_option.text }}</p>
+        <p>To‘g‘ri javob: {{ answer.correct_option.text }}</p>
+        {% if answer.is_correct %}
+            <p style="color:green;">✅ To‘g‘ri</p>
+        {% else %}
+            <p style="color:red;">❌ Noto‘g‘ri</p>
+        {% endif %}
+    </div>
+{% endfor %}
+
+<a href="{% url 'students:enter_test_code' %}">🔙 Yangi testga qaytish</a>
+{% endblock %}

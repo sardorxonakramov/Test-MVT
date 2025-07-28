@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "USERS",
-    "TEACHERS"
+    "TEACHERS",
+    "STUDENTS",
     # 'SUBJECTS',
     # 'enrollments',
 ]
@@ -82,6 +83,18 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+# Exam/settings.py
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "Exam",
+#         "USER": "postgres",
+#         "PASSWORD": "Qwerty123$",
+#         "HOST": "localhost",
+#         "PORT": "5432",
+#     }
+# }
 
 
 # Password validation
@@ -121,16 +134,16 @@ USE_TZ = True
 STATIC_URL = "static/"
 # STATIC_ROOT = BASE_DIR / "static"
 # STATIC_DIRS = BASE_DIR / "static"
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-AUTH_USER_MODEL = 'USERS.CustomUser'
+AUTH_USER_MODEL = "USERS.CustomUser"
 
-LOGIN_URL = '/users/login/'
-LOGOUT_REDIRECT_URL = '/users/login/'
+LOGIN_URL = "/users/login/"
+LOGOUT_REDIRECT_URL = "/users/login/"
 # LOGIN_REDIRECT_URL = '/dashboard/'  # login'dan so'ng qayerga o'tadi

@@ -23,6 +23,11 @@
             
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    {% if request.user.role == 'teacher' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'teachers:test_list' %}"> My Tests </a>
+                    </li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="#">👤 {{ user.full_name }}</a>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="max-w-xl mx-auto p-6 bg-white shadow-lg rounded-xl">
+    <h1 class="text-3xl font-bold mb-4 text-center">{{ test.title }}</h1>
+    <p class="mb-2 text-gray-700">{{ test.description }}</p>
+    <p class="mb-4 text-sm text-gray-500">Davomiyligi: {{ test.duration }} daqiqa</p>
+
+    <form method="post" action="{% url 'students:start_test' test.code 1 %}">
+      {% csrf_token %}
+      <div class="flex justify-center">
+        <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded hover:bg-blue-700 transition">
+          Testni boshlash
+        </button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

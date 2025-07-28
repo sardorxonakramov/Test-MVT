@@ -1,0 +1,12 @@
+<!-- templates/students/test_result.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h3>Natija</h3>
+  <p><strong>To‘g‘ri javoblar:</strong> {{ correct_answers }}</p>
+  <p><strong>Noto‘g‘ri javoblar:</strong> {{ incorrect_answers }}</p>
+  <a href="{% url 'students:test_result_detail' student_test.pk %}">Natijani batafsil ko‘rish</a>
+</div>
+{% endblock %}
+
