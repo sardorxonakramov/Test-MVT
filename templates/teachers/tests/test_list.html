@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Testlar ro‘yxati{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Yaratilgan Testlar</h2>
+        <a href="{% url 'teachers:test_create' %}" class="btn btn-success">+ Yangi test qo‘shish</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover bg-white align-middle text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Sarlavha</th>
+                    <th>Kod</th>
+                    <th>Muddati (min)</th>
+                    <th>Yaratilgan</th>
+                    <th>Amallar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for test in tests %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="{% url 'teachers:test_detail' test.pk %}" class="text-decoration-none">
+                            {{ test.title }}
+                        </a>
+                    </td>
+                    <td><code>{{ test.code }}</code></td>
+                    <td>{{ test.duration }}</td>
+                    <td>{{ test.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="{% url 'teachers:test_update' test.pk %}" class="btn btn-sm btn-outline-primary">Tahrirlash</a>
+                            <a href="{% url 'teachers:test_delete' test.pk %}" class="btn btn-sm btn-outline-danger">O‘chirish</a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-muted">Hech qanday test topilmadi.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

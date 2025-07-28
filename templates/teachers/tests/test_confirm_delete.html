@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Testni o‘chirish{% endblock %}
+{% block content %}
+<h3>Testni o‘chirishga ishonchingiz komilmi?</h3>
+<p><strong>{{ test.title }}</strong> (kod: {{ test.code }})</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Ha, o‘chirish</button>
+    <a href="{% url 'teachers:test_list' %}" class="btn btn-secondary">Yo‘q, ortga</a>
+</form>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>{% if question %}Savolni tahrirlash{% else %}Yangi savol qo‘shish{% endif %}</h3>
+
+    <form method="post" enctype="multipart/form-data" id="question-form">
+        {% csrf_token %}
+
+        <!-- Savol uchun maydonlar -->
+        <div class="mb-3">
+            <label for="id_text">Savol matni:</label>
+            <textarea name="text" class="form-control" id="id_text">{{ question.text|default_if_none:"" }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="id_image">Savol rasmi (ixtiyoriy):</label>
+            <input type="file" name="image" class="form-control" id="id_image">
+        </div>
+
+        <div class="mb-3">
+            <label for="id_warning">Izoh yoki ogohlantirish:</label>
+            <textarea name="warning" class="form-control" id="id_warning">{{ question.warning|default_if_none:"" }}</textarea>
+        </div>
+
+        <!-- Variantlar -->
+        <h5>Variantlar:</h5>
+        <div id="options-container"></div>
+
+        <button type="button" class="btn btn-outline-success my-2" id="add-option-btn">+ Variant qo‘shish</button>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Saqlash</button>
+            <a href="{% url 'teachers:test_detail' test.id %}" class="btn btn-secondary">Bekor qilish</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    let optionCount = 0;
+
+    document.getElementById('add-option-btn').addEventListener('click', function() {
+        optionCount++;
+        const container = document.getElementById('options-container');
+
+        const optionDiv = document.createElement('div');
+        optionDiv.classList.add('border', 'p-3', 'mb-2', 'rounded');
+        optionDiv.innerHTML = `
+            <div class="mb-2">
+                <label>Variant matni:</label>
+                <input type="text" name="option_text_${optionCount}" class="form-control">
+            </div>
+            <div class="mb-2">
+                <label>Variant rasmi (ixtiyoriy):</label>
+                <input type="file" name="option_image_${optionCount}" class="form-control">
+            </div>
+            <div class="form-check mb-2">
+                <input type="checkbox" name="option_correct_${optionCount}" class="form-check-input" id="correct_${optionCount}">
+                <label class="form-check-label" for="correct_${optionCount}">To‘g‘ri javob</label>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm remove-option-btn">❌ O‘chirish</button>
+        `;
+
+        container.appendChild(optionDiv);
+
+        optionDiv.querySelector('.remove-option-btn').addEventListener('click', () => {
+            optionDiv.remove();
+        });
+    });
+</script>
+{% endblock %}
