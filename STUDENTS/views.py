@@ -85,3 +85,102 @@ def test_result(request, test_id, attempt_number):
         'student_test': student_test,
         'answers': answers
     })
+
+
+"""
+# from django.utils.timezone import now
+# from datetime import timedelta
+
+# # def start_test(request, test_id, attempt_number):
+# #     test = get_object_or_404(Test, id=test_id)
+# #     student_test = get_object_or_404(StudentTest, student=request.user, test=test, attempt_number=attempt_number)
+
+# #     # Vaqtni tekshiramiz
+# #     time_passed = now() - student_test.started_at
+# #     if time_passed > timedelta(minutes=test.duration):
+# #         student_test.completed = True
+# #         student_test.score = StudentAnswer.objects.filter(student_test=student_test, is_correct=True).count()
+# #         student_test.save()
+# #         return redirect('students:test_result', test_id=test.id, attempt_number=attempt_number)
+
+# #     if student_test.completed:
+# #         return redirect('students:test_result', test_id=test.id, attempt_number=attempt_number)
+
+# #     answered_questions = StudentAnswer.objects.filter(student_test=student_test).values_list('question_id', flat=True)
+# #     next_question = test.questions.exclude(id__in=answered_questions).first()
+
+# #     if not next_question:
+# #         student_test.completed = True
+# #         student_test.score = StudentAnswer.objects.filter(student_test=student_test, is_correct=True).count()
+# #         student_test.save()
+# #         return redirect('students:test_result', test_id=test.id, attempt_number=attempt_number)
+
+# #     if request.method == 'POST':
+# #         selected_option_id = request.POST.get('option')
+# #         if selected_option_id:
+# #             selected_option = get_object_or_404(Option, id=selected_option_id)
+# #             StudentAnswer.objects.create(
+# #                 student_test=student_test,
+# #                 question=next_question,
+# #                 selected_option=selected_option,
+# #                 is_correct=selected_option.is_correct
+# #             )
+# #             return redirect('students:start_test', test_id=test.id, attempt_number=attempt_number)
+
+# #     return render(request, 'students/start_test.html', {
+# #         'test': test,
+# #         'question': next_question,
+# #         'options': next_question.options.all(),
+# #         'student_test': student_test,
+# #     })
+
+# from django.utils.timezone import now
+# from datetime import timedelta
+
+# # def finish_student_test(student_test):
+# #     student_test.completed = True
+# #     student_test.score = StudentAnswer.objects.filter(student_test=student_test, is_correct=True).count()
+# #     student_test.save()
+
+# # def start_test(request, test_id, attempt_number):
+# #     test = get_object_or_404(Test, id=test_id)
+# #     student_test = get_object_or_404(StudentTest, student=request.user, test=test, attempt_number=attempt_number)
+
+# #     # Vaqt tugaganmi?
+# #     time_passed = now() - student_test.started_at
+# #     if time_passed > timedelta(minutes=test.duration):
+# #         finish_student_test(student_test)
+# #         return redirect('students:test_result', test_id=test.id, attempt_number=attempt_number)
+
+# #     if student_test.completed:
+# #         return redirect('students:test_result', test_id=test.id, attempt_number=attempt_number)
+
+# #     # Yechilgan savollarni tekshiramiz
+# #     answered_questions = StudentAnswer.objects.filter(student_test=student_test).values_list('question_id', flat=True)
+# #     next_question = test.questions.exclude(id__in=answered_questions).first()
+
+# #     # Barcha savollar tugaganmi?
+# #     if not next_question:
+# #         finish_student_test(student_test)
+# #         return redirect('students:test_result', test_id=test.id, attempt_number=attempt_number)
+
+# #     # POST orqali kelgan javobni saqlaymiz
+# #     if request.method == 'POST':
+# #         selected_option_id = request.POST.get('option')
+# #         if selected_option_id:
+# #             selected_option = get_object_or_404(Option, id=selected_option_id)
+# #             StudentAnswer.objects.create(
+# #                 student_test=student_test,
+# #                 question=next_question,
+# #                 selected_option=selected_option,
+# #                 is_correct=selected_option.is_correct
+# #             )
+# #             return redirect('students:start_test', test_id=test.id, attempt_number=attempt_number)
+
+# #     return render(request, 'students/start_test.html', {
+# #         'test': test,
+# #         'question': next_question,
+# #         'options': next_question.options.all(),
+# #         'student_test': student_test,
+# #     })
+"""

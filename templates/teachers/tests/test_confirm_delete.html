@@ -1,12 +1,32 @@
 {% extends "base.html" %}
 {% block title %}Testni o‘chirish{% endblock %}
-{% block content %}
-<h3>Testni o‘chirishga ishonchingiz komilmi?</h3>
-<p><strong>{{ test.title }}</strong> (kod: {{ test.code }})</p>
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Ha, o‘chirish</button>
-    <a href="{% url 'teachers:test_list' %}" class="btn btn-secondary">Yo‘q, ortga</a>
-</form>
+{% block content %}
+<div class="container mt-5">
+    <div class="card border-0 shadow-lg rounded-5">
+        <!-- Yuqoridagi gradient border -->
+        <div class="position-absolute top-0 start-0 w-100" style="height: 6px; background: linear-gradient(to right, #dc3545, #6c757d);"></div>
+
+        <div class="card-body p-5 bg-white">
+            <h3 class="text-center text-danger fw-bold mb-4">
+                🗑 Testni o‘chirishga ishonchingiz komilmi?
+            </h3>
+
+            <div class="text-center mb-4">
+                <p class="fs-5"><strong>{{ test.title }}</strong></p>
+                <p class="text-muted small">Kod: <code>{{ test.code }}</code></p>
+            </div>
+
+            <form method="post" class="d-flex justify-content-center gap-3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg rounded-4 px-4 shadow-sm">
+                    <i class="bi bi-trash3-fill me-1"></i> Ha, o‘chirish
+                </button>
+                <a href="{% url 'teachers:test_list' %}" class="btn btn-secondary btn-lg rounded-4 px-4 shadow-sm">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Yo‘q, ortga
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

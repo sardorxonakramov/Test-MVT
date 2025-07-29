@@ -5,7 +5,6 @@ import random, string
 
 User = settings.AUTH_USER_MODEL
 
-
 class Test(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -33,10 +32,9 @@ class Test(models.Model):
         return self.title
 
 
-
 class Question(models.Model):
     test = models.ForeignKey(Test, related_name='questions', on_delete=models.CASCADE)
-    text = models.TextField(blank=True, null=True)
+    text = models.TextField(blank=True, null=True, help_text="LaTeX formatida savol matni")
     image = models.ImageField(upload_to='teachers/questions/', blank=True, null=True)
     warning = models.TextField(blank=True, null=True)
 
@@ -46,7 +44,7 @@ class Question(models.Model):
 
 class Option(models.Model):
     question = models.ForeignKey(Question, related_name='options', on_delete=models.CASCADE)
-    text = models.CharField(max_length=255, blank=True, null=True)
+    text = models.CharField(max_length=255, blank=True, null=True, help_text="LaTeX formatida variant matni")
     image = models.ImageField(upload_to='teachers/options/', blank=True, null=True)
     is_correct = models.BooleanField(default=False)
 

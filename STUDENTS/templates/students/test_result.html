@@ -3,25 +3,86 @@
 {% block title %}Natija{% endblock %}
 
 {% block content %}
-<h2>Test natijasi: {{ test.title }}</h2>
-<p><strong>Ball:</strong> {{ student_test.score }}</p>
-<p><strong>To‘g‘ri javoblar soni:</strong> {{ correct_count }}</p>
-<p><strong>Jami savollar:</strong> {{ total_questions }}</p>
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4 bg-white">
 
-<hr>
+            <!-- Sarlavha -->
+            <h3 class="text-center text-primary mb-4">
+                📊 Test natijasi: <span class="fw-semibold">{{ test.title }}</span>
+            </h3>
 
-{% for answer in answers %}
-    <div style="margin-bottom: 15px;">
-        <p><strong>{{ forloop.counter }}. {{ answer.question.text }}</strong></p>
-        <p>Siz tanlagan javob: {{ answer.selected_option.text }}</p>
-        <p>To‘g‘ri javob: {{ answer.correct_option.text }}</p>
-        {% if answer.is_correct %}
-            <p style="color:green;">✅ To‘g‘ri</p>
-        {% else %}
-            <p style="color:red;">❌ Noto‘g‘ri</p>
-        {% endif %}
+            <!-- Statistika blok -->
+            <div class="row g-3 justify-content-center text-center mb-4">
+                <div class="col-6 col-md-4">
+                    <div class="bg-success-subtle border border-success rounded-3 py-2">
+                        <div class="fw-semibold text-success">Ball</div>
+                        <div class="fs-5">{{ student_test.score }}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="bg-info-subtle border border-info rounded-3 py-2">
+                        <div class="fw-semibold text-info">To‘g‘ri javoblar</div>
+                        <div class="fs-5">{{ correct_count }}</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="bg-secondary-subtle border border-secondary rounded-3 py-2">
+                        <div class="fw-semibold text-secondary">Jami savollar</div>
+                        <div class="fs-5">{{ total_questions }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Har bir javob -->
+            <div class="accordion" id="answersAccordion">
+                {% for answer in answers %}
+                <div class="accordion-item border-0 mb-2 rounded-3 shadow-sm">
+                    <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                        <button class="accordion-button collapsed py-2 {% if answer.is_correct %}text-success{% else %}text-danger{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}">
+                            {{ forloop.counter }}. {{ answer.question.text|safe }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#answersAccordion">
+                        <div class="accordion-body small">
+                            <p><strong>Siz tanlagan:</strong> {{ answer.selected_option.text|safe }}</p>
+                            <p><strong>To‘g‘ri javob:</strong> {{ answer.correct_option.text|safe }}</p>
+                            {% if answer.is_correct %}
+                                <p class="text-success fw-bold mb-0">✅ To‘g‘ri</p>
+                            {% else %}
+                                <p class="text-danger fw-bold mb-0">❌ Noto‘g‘ri</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Tugma -->
+            <div class="text-center mt-4">
+                <a href="{% url 'students:enter_test_code' %}" class="btn btn-outline-primary shadow-sm">
+                    🔙 Yangi testga qaytish
+                </a>
+            </div>
+
+        </div>
     </div>
-{% endfor %}
+</div>
 
-<a href="{% url 'students:enter_test_code' %}">🔙 Yangi testga qaytish</a>
+<!-- MathJax LaTeX qo'llab-quvvatlash -->
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
 {% endblock %}

@@ -1,24 +1,111 @@
 {% extends 'base.html' %}
-
 {% block title %}Testni Boshlash{% endblock %}
 
 {% block content %}
-<h2>{{ test.title }}</h2>
 
-<form method="post">
-    {% csrf_token %}
-    
-    <div style="margin-bottom: 20px;">
-        <strong>{{ question.text }}</strong><br>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5 bg-white position-relative">
 
-        {% for option in options %}
-            <label>
-                <input type="radio" name="option" value="{{ option.id }}" required>
-                {{ option.text }}
-            </label><br>
-        {% endfor %}
+                    <!-- ⏳ Countdown Timer -->
+                    <div class="position-absolute top-0 end-0 m-4">
+                        <div id="timer" class="badge bg-danger text-white fs-5 px-3 py-2 shadow rounded-pill">
+                            00:00
+                        </div>
+                    </div>
+
+                    <!-- 📋 Test Sarlavhasi -->
+                    <h3 class="text-center text-primary mb-4 fw-bold">
+                        <i class="bi bi-pencil-square me-2"></i> {{ test.title }}
+                    </h3>
+
+                    <!-- 🧠 Savol va variantlar -->
+                    <form method="post" id="questionForm">
+                        {% csrf_token %}
+                        
+                        <!-- Savol matni -->
+                        <div class="mb-4">
+                            <h5 class="fw-semibold text-dark mb-3">{{ question.text|safe }}</h5>
+
+                            <!-- Javob variantlari -->
+                            <div class="list-group">
+                                {% for option in options %}
+                                    <label class="list-group-item d-flex align-items-center gap-3 shadow-sm rounded">
+                                        <input class="form-check-input me-2" type="radio" name="option" value="{{ option.id }}" required>
+                                        <span class="fs-6">{{ option.text|safe }}</span>
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <!-- 🚀 Tugma -->
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" class="btn btn-success px-4 py-2 fs-5 shadow">
+                                Keyingi savol <i class="bi bi-arrow-right-circle ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <button type="submit">Keyingi savol</button>
-</form>
+
+<!-- 📐 MathJax LaTeX qo'llab-quvvatlash -->
+<script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      startup: {
+        ready: () => {
+          MathJax.startup.defaultReady();
+          MathJax.typeset();
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  
+  
+
+<!-- ⌛ Countdown Timer Script -->
+<script>
+    const durationMinutes = {{ test.duration }}; // daqiqalarda
+    const endTime = new Date().getTime() + durationMinutes * 60 * 1000;
+
+    // ❗Ogohlantirish chiqarsin
+    window.onbeforeunload = function () {
+        return "Test davomida sahifani tark etmang!";
+    };
+
+    function updateTimer() {
+        const now = new Date().getTime();
+        const remaining = endTime - now;
+
+        if (remaining <= 0) {
+            document.getElementById("timer").innerText = "00:00";
+            clearInterval(timerInterval);
+            window.onbeforeunload = null;
+            document.getElementById("questionForm").submit();
+        } else {
+            const minutes = String(Math.floor(remaining / (1000 * 60))).padStart(2, '0');
+            const seconds = String(Math.floor((remaining % (1000 * 60)) / 1000)).padStart(2, '0');
+            document.getElementById("timer").innerText = `${minutes}:${seconds}`;
+        }
+    }
+
+    const timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+</script>
+
+
 {% endblock %}

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "USERS",
     "TEACHERS",
     "STUDENTS",
+
+    'widget_tweaks'
     # 'SUBJECTS',
     # 'enrollments',
 ]

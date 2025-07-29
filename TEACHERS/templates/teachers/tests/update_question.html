@@ -1,108 +1,134 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="container mt-4">
-  <h3 class="mb-3">Savolni tahrirlash</h3>
+<div class="container mt-5">
+  <h3 class="mb-4 fw-semibold">✏️ Savolni tahrirlash</h3>
 
-  <form method="post" enctype="multipart/form-data" class="p-4 shadow-sm bg-light rounded">
+  <form method="post" enctype="multipart/form-data" class="p-4 shadow bg-white rounded-4 border border-light-subtle" id="question-update-form">
     {% csrf_token %}
-    
-    <div class="mb-3">
-      {{ form.non_field_errors }}
-      {{ form.text.label_tag }} {{ form.text }}
+    {{ form.non_field_errors }}
+
+    <!-- SAVOL MAYDONI -->
+    <div class="mb-4">
+      {{ form.text|add_class:"form-control border-0 shadow-sm fs-5 py-3 px-3 rounded-3" }}
     </div>
 
-    <div class="mb-3">
-      {{ form.image.label_tag }} {{ form.image }}
+    <!-- SAVOL LaTeX PREVIEW -->
+    <div class="mb-4">
+      <label class="fw-medium">Savol LaTeX ko‘rinishi:</label>
+      <div id="question-latex-preview" class="border p-3 bg-light rounded-3"></div>
     </div>
 
-    <div class="mb-3">
-      {{ form.warning.label_tag }} {{ form.warning }}
+    <!-- RASM va WARNING yonma-yon -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        {{ form.image|add_class:"form-control border-0 shadow-sm rounded-3" }}
+      </div>
+      <div class="col-md-6">
+        {{ form.warning|add_class:"form-control border-0 shadow-sm rounded-3" }}
+      </div>
     </div>
 
-    <hr>
-    <h5 class="mt-4">Variantlar</h5>
+    <hr class="my-4">
+
+    <h5 class="mb-3 fw-semibold">📝 Variantlar</h5>
     <div id="formset">
       {{ formset.management_form }}
-      {% for form in formset %}
-        <div class="formset-item mb-3 border p-3 rounded bg-white position-relative">
-          {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-          {% endfor %}
 
-          <div class="row g-3">
+      {% for form in formset %}
+        <div class="formset-item card p-3 mb-3 border-0 shadow-sm bg-body-tertiary rounded-4">
+          {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+
+          <div class="row g-3 align-items-end">
             <div class="col-md-6">
-              {{ form.text.label_tag }} {{ form.text }}
+              {{ form.text|add_class:"form-control border-0 shadow-sm option-text" }}  
+              <div class="mt-2">
+                <label class="small text-muted">LaTeX preview:</label>
+                <div class="option-latex-preview border p-2 bg-light rounded-3"></div>
+              </div>
             </div>
             <div class="col-md-4">
-              {{ form.image.label_tag }} {{ form.image }}
+              {{ form.image|add_class:"form-control border-0 shadow-sm" }}
             </div>
-            <div class="col-md-2 text-end">
-              <label>&nbsp;</label><br>
-              {{ form.is_correct }}
-              <span class="small">To'g'ri</span>
+            <div class="col-md-2">
+              <div class="form-check mb-2">
+                {{ form.is_correct|add_class:"form-check-input" }}
+                <label class="form-check-label">✅</label>
+              </div>
+              {% if form.instance.pk %}
+              <div class="form-check">
+                {{ form.DELETE|add_class:"form-check-input" }}
+                <label class="form-check-label text-danger">🗑</label>
+              </div>
+              {% endif %}
             </div>
           </div>
-
-          {% if form.instance.pk %}
-            <div class="form-check mt-2">
-              {{ form.DELETE }} <label class="form-check-label">O'chirish</label>
-            </div>
-          {% endif %}
         </div>
       {% endfor %}
     </div>
 
-    <button type="submit" class="btn btn-success">Saqlash</button>
+    <div class="mt-4 text-end">
+      <button type="submit" class="btn btn-success px-4 py-2 rounded-3 fw-semibold shadow-sm">💾 Saqlash</button>
+    </div>
   </form>
-
-  <style>
-    input[type="text"], textarea, select {
-      width: 100%;
-      padding: 6px 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    .formset-item {
-      margin-bottom: 15px;
-    }
-
-    .btn-success {
-      margin-top: 20px;
-    }
-  </style>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      let totalForms = document.getElementById('id_form-TOTAL_FORMS');
-      const formsetDiv = document.getElementById('formset');
-      const addBtn = document.createElement('button');
-      addBtn.textContent = "Variant qo‘shish";
-      addBtn.type = "button";
-      addBtn.classList.add("btn", "btn-secondary", "mt-3");
-      formsetDiv.appendChild(addBtn);
-  
-      addBtn.addEventListener("click", function () {
-        const currentFormCount = parseInt(totalForms.value);
-        const emptyFormHtml = formsetDiv.querySelector('.formset-item').cloneNode(true);
-  
-        // Tozalash
-        emptyFormHtml.querySelectorAll('input, textarea').forEach(input => {
-          if (input.type === "checkbox") {
-            input.checked = false;
-          } else {
-            input.value = "";
-          }
-        });
-  
-        // Form nomlarini yangilash
-        emptyFormHtml.innerHTML = emptyFormHtml.innerHTML.replace(/form-(\d)+-/g, `form-${currentFormCount}-`);
-        formsetDiv.insertBefore(emptyFormHtml, addBtn);
-        totalForms.value = currentFormCount + 1;
-      });
-    });
-  </script>
-  
 </div>
+
+<!-- STYLE (minimal, tartibli) -->
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+
+  input[type="text"], select {
+    border-radius: 10px;
+    padding: 10px 14px;
+    background-color: #fff;
+  }
+
+  input[type="text"]:focus, select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.25);
+    outline: none;
+  }
+
+  .formset-item:hover {
+    background-color: #f1f3f5;
+    transition: background-color 0.2s ease-in-out;
+  }
+</style>
+
+<!-- MathJax -->
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+<!-- LaTeX render script -->
+<script>
+  // Savol preview
+  const questionInput = document.querySelector('#id_text');
+  const questionPreview = document.querySelector('#question-latex-preview');
+
+  function renderQuestionLatex() {
+    const val = questionInput.value;
+    questionPreview.innerHTML = `\\[${val}\\]`;
+    if (window.MathJax) MathJax.typesetPromise([questionPreview]);
+  }
+  if (questionInput) {
+    questionInput.addEventListener('input', renderQuestionLatex);
+    renderQuestionLatex();
+  }
+
+  // Variantlar preview
+  document.querySelectorAll('.option-text').forEach(function (input) {
+    const preview = input.closest('.col-md-6').querySelector('.option-latex-preview');
+    function renderOptionLatex() {
+      preview.innerHTML = `\\[${input.value}\\]`;
+      if (window.MathJax) MathJax.typesetPromise([preview]);
+    }
+    input.addEventListener('input', renderOptionLatex);
+    renderOptionLatex();
+  });
+</script>
 {% endblock %}

@@ -3,52 +3,67 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>{{ test.title }}</h2>
-    <p>{{ test.description }}</p>
-    <p><strong>Test KODI:</strong> {{ test.code }}</p>
-    <hr>
+    <div class="text-center mb-4">
+        <h3 class="text-primary fw-semibold">{{ test.title }}</h3>
+        <p class="text-muted">{{ test.description }}</p>
+        <p><span class="fw-semibold">🔑 KOD:</span> <code>{{ test.code }}</code></p>
+    </div>
 
-    <h4>Savollar ro‘yxati ({{ test.questions.count }})</h4>
-    <a href="{% url 'teachers:add_question' test.id %}" class="btn btn-success mb-3">+ Yangi savol qo‘shish</a>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">📋 Savollar ({{ test.questions.count }})</h5>
+        <a href="{% url 'teachers:add_question' test.id %}" class="btn btn-sm btn-success rounded-3 shadow">
+            <i class="bi bi-plus-lg"></i> Savol qo‘shish
+        </a>
+    </div>
 
     {% for question in questions %}
-        <div class="card mb-3">
-            <div class="card-body">
-                {% if question.text %}
-                    <h5>{{ question.text }}</h5>
-                {% endif %}
-                {% if question.image %}
-                    <img src="{{ question.image.url }}" class="img-fluid mb-2" alt="Question Image">
-                {% endif %}
-                {% if question.warning %}
-                    <p class="text-danger"><strong>Eslatma:</strong> {{ question.warning }}</p>
-                {% endif %}
+    <div class="card mb-3 shadow-sm border-0 rounded-3">
+        <div class="card-body pb-2 pt-3 px-3">
+            {% if question.text %}
+                <p class="mb-1 fw-semibold">{{ question.text|truncatechars:150 }}</p>
+            {% endif %}
 
-                <div class="mt-2">
-                    <a href="{% url 'teachers:edit_question' question.id %}" class="btn btn-sm btn-primary">Tahrirlash</a>
-                    <a href="{% url 'teachers:delete_question' question.id %}" class="btn btn-sm btn-danger"
-                       onclick="return confirm('Bu savolni o‘chirishga ishonchingiz komilmi?')">O‘chirish</a>
+            {% if question.image %}
+                <img src="{{ question.image.url }}" class="img-thumbnail mb-2" style="max-height:120px;" alt="Savol rasmi">
+            {% endif %}
+
+            {% if question.warning %}
+                <div class="alert alert-warning py-1 px-2 small mb-2">
+                    <strong>Eslatma:</strong> {{ question.warning }}
                 </div>
+            {% endif %}
 
-                <hr>
-                <h6>Javob variantlari:</h6>
-                <ul>
-                    {% for option in question.options.all %}
-                        <li>
-                            {% if option.text %}{{ option.text }}{% endif %}
-                            {% if option.image %}<img src="{{ option.image.url }}" height="30">{% endif %}
-                            {% if option.is_correct %}
-                                <strong class="text-success"> (To‘g‘ri javob)</strong>
-                            {% endif %}
-                        </li>
-                    {% empty %}
-                        <li>Variantlar yo‘q</li>
-                    {% endfor %}
-                </ul>
+            <div class="d-flex gap-2 mb-2">
+                <a href="{% url 'teachers:edit_question' question.id %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{% url 'teachers:delete_question' question.id %}" class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Bu savolni o‘chirishga ishonchingiz komilmi?')">
+                    <i class="bi bi-trash"></i>
+                </a>
             </div>
+
+            <ul class="list-group list-group-flush small">
+                {% for option in question.options.all %}
+                    <li class="list-group-item py-1 px-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            {% if option.text %}{{ option.text }}{% endif %}
+                            {% if option.image %}
+                                <img src="{{ option.image.url }}" style="height:25px;" class="ms-2 rounded border">
+                            {% endif %}
+                        </div>
+                        {% if option.is_correct %}
+                            <span class="badge bg-success">To‘g‘ri</span>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted py-1">Variantlar yo‘q</li>
+                {% endfor %}
+            </ul>
         </div>
+    </div>
     {% empty %}
-        <p>Hozircha hech qanday savollar yo‘q.</p>
+        <div class="alert alert-info text-center">Hali hech qanday savol qo‘shilmagan.</div>
     {% endfor %}
 </div>
 {% endblock %}

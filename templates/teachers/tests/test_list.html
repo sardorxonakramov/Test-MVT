@@ -2,50 +2,74 @@
 {% block title %}Testlar ro‘yxati{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Yaratilgan Testlar</h2>
-        <a href="{% url 'teachers:test_create' %}" class="btn btn-success">+ Yangi test qo‘shish</a>
-    </div>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-5 overflow-hidden">
+        <!-- Yuqoridagi gradient chiziq -->
+        <div class="position-absolute top-0 start-0 w-100" style="height: 6px; background: linear-gradient(to right, #0d6efd, #198754);"></div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover bg-white align-middle text-center">
-            <thead class="table-light">
-                <tr>
-                    <th>#</th>
-                    <th>Sarlavha</th>
-                    <th>Kod</th>
-                    <th>Muddati (min)</th>
-                    <th>Yaratilgan</th>
-                    <th>Amallar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for test in tests %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>
-                        <a href="{% url 'teachers:test_detail' test.pk %}" class="text-decoration-none">
-                            {{ test.title }}
-                        </a>
-                    </td>
-                    <td><code>{{ test.code }}</code></td>
-                    <td>{{ test.duration }}</td>
-                    <td>{{ test.created_at|date:"d.m.Y H:i" }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <a href="{% url 'teachers:test_update' test.pk %}" class="btn btn-sm btn-outline-primary">Tahrirlash</a>
-                            <a href="{% url 'teachers:test_delete' test.pk %}" class="btn btn-sm btn-outline-danger">O‘chirish</a>
-                        </div>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="text-muted">Hech qanday test topilmadi.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="card-body p-5 bg-white">
+            <!-- Sarlavha va "+" tugmasi -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="text-gradient fw-bold">📚 Yaratilgan testlar</h2>
+                <a href="{% url 'teachers:test_create' %}" class="btn btn-success rounded-4 shadow-sm px-4 py-2">
+                    <i class="bi bi-plus-circle me-1"></i> Yangi test qo‘shish
+                </a>
+            </div>
+
+            <!-- Jadval -->
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-center shadow-sm rounded-4 overflow-hidden">
+                    <thead class="table-light">
+                        <tr class="align-middle">
+                            <th>#</th>
+                            <th>Sarlavha</th>
+                            <th>Kod</th>
+                            <th>Muddati (min)</th>
+                            <th>Yaratilgan</th>
+                            <th>Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for test in tests %}
+                        <tr>
+                            <td class="fw-bold">{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'teachers:test_detail' test.pk %}"
+                                   class="text-decoration-none text-dark fw-semibold">
+                                    {{ test.title }}
+                                </a>
+                            </td>
+                            <td><span class="badge bg-primary-subtle text-primary"><code>{{ test.code }}</code></span></td>
+                            <td><span class="text-muted">{{ test.duration }}</span></td>
+                            <td><small class="text-muted">{{ test.created_at|date:"d.m.Y H:i" }}</small></td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{% url 'teachers:test_update' test.pk %}" class="btn btn-outline-primary rounded-start">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <a href="{% url 'teachers:test_delete' test.pk %}" class="btn btn-outline-danger rounded-end"
+                                       onclick="return confirmDelete(this)">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted fst-italic">📭 Hech qanday test topilmadi.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- JS: Tasdiqlovchi o‘chirish oynasi -->
+<script>
+    function confirmDelete(link) {
+        return confirm("Testni o‘chirmoqchimisiz?");
+    }
+</script>
 {% endblock %}
